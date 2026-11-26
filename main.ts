@@ -2,6 +2,9 @@
 // single line of text — one funny single-line sport the Olympics turned
 // down — to /output/entry.txt.
 //
+// Design against the judge's brief: the line reads like a real broadcast
+// event, turns absurd and funny in a single read, and stays quotable.
+//
 // Outside the grader's container, MAKEFUN_OUTPUT_DIR stands in for /output:
 //   mkdir -p out && MAKEFUN_OUTPUT_DIR=out node main.ts
 //
@@ -16,8 +19,10 @@ const LINE =
 
 // The sealed scorer only accepts 1–200 UTF-8 characters, not only whitespace:
 // fail loudly here instead of writing an entry the judge would never see.
-if (LINE.length < 1 || LINE.length > 200 || LINE.trim().length === 0) {
-  throw new Error(`entry line must be 1-200 characters, got ${LINE.length}`);
+const MIN_ENTRY_CHARS = 1;
+const MAX_ENTRY_CHARS = 200;
+if (LINE.length < MIN_ENTRY_CHARS || LINE.length > MAX_ENTRY_CHARS || LINE.trim().length === 0) {
+  throw new Error(`entry line must be ${MIN_ENTRY_CHARS}-${MAX_ENTRY_CHARS} characters, got ${LINE.length}`);
 }
 
 const outDir = process.env.MAKEFUN_OUTPUT_DIR ?? '/output';
